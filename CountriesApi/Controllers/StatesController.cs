@@ -27,6 +27,12 @@ namespace CountriesApi.Controllers
             return Ok(_mapper.Map<IEnumerable<StateDto>>(_statesService.List(countryId)));
         }
 
+
+        [HttpGet]
+        public ActionResult<IEnumerable<StateDto>> List()
+        {
+            return Ok(_mapper.Map<IEnumerable<StateDto>>(_statesService.List()));
+        }
         [HttpGet("{id}")]
         public ActionResult<StateDto> Get(int id)
         {

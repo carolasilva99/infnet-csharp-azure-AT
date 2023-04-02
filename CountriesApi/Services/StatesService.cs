@@ -95,6 +95,43 @@ namespace CountriesApi.Services
             return states;
         }
 
+        public IEnumerable<State> List()
+        {
+            var states = new List<State>();
+
+            using var connection = new SqlConnection(_connectionStrings.Database);
+            var procedureName = "GetStates";
+            var sqlCommand = new SqlCommand(procedureName, connection);
+
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+
+            try
+            {
+                connection.Open();
+
+                using var reader = sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+                    var state = new State()
+                    {
+                        Id = (int)reader["Id"],
+                        Name = reader["Name"].ToString() ?? string.Empty,
+                        PhotoId = reader["PhotoId"].ToString() ?? string.Empty,
+                        CountryId = (int)reader["CountryId"],
+                        CountryName = reader["CountryName"].ToString() ?? string.Empty
+                    };
+
+                    states.Add(state);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return states;
+        }
+
         public State GetById(int id)
         {
             var state = default(State);

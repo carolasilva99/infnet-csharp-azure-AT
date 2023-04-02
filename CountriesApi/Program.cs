@@ -2,7 +2,10 @@ using System.Net.Mime;
 using AT.Domain;
 using CountriesApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +42,14 @@ builder.Services.AddCors(setupAction =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.Configure<MvcOptions>(c =>
+    c.Conventions.Add(new SwaggerApplicationConvention()));
+
+// Register generator and it's dependencies
+builder.Services.AddTransient<ISwaggerProvider, SwaggerGenerator>();
+builder.Services.AddTransient<ISchemaGenerator, SchemaGenerator>();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo

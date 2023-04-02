@@ -12,5 +12,6 @@ namespace AT.Domain
         public string Name { get; set; }
         public string PhotoId { get; set; }
         public int CountryId { get; set; }
+        public string CountryName { get; set; }
     }
 }

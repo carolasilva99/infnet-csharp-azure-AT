@@ -10,8 +10,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FormFile" class="control-label"></label>
+                <input asp-for="FormFile" class="form-control" type="file"/>
+                <span asp-validation-for="FormFile" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
@@ -21,11 +26,6 @@
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PhotoBase64" class="control-label"></label>
-                <input asp-for="PhotoBase64" class="form-control" />
-                <span asp-validation-for="PhotoBase64" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
@@ -43,14 +43,18 @@
                 <span asp-validation-for="BirthDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <input asp-for="CountryId" class="form-control" />
-                <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StateId" class="control-label"></label>
-                <input asp-for="StateId" class="form-control" />
-                <span asp-validation-for="StateId" class="text-danger"></span>
+                <select id="StateId" name="StateId">
+                    @{
+                        if (ViewBag?.States != null)
+                        {
+                            foreach (var state in ViewBag.States)
+                            {
+                                <option value="@state.Id">@state.CountryName - @state.Name</option>
+                                @Html.HiddenFor(m => m.CountryId)
+                            }
+                        }
+                    }
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

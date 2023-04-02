@@ -9,5 +9,6 @@ namespace CountriesApi.Services
         State GetById(int id);
         State Update(State state);
         void Delete(int id);
+        IEnumerable<State> List();
     }
 }
