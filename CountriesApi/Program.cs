@@ -87,4 +87,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.UseSwaggerUI();
+
 app.Run();
