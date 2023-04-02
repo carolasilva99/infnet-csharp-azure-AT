@@ -50,7 +50,7 @@ namespace MVC.Controllers
         // GET: FriendsController/Create
         public async Task<ActionResult> Create()
         {
-            var states = await $"{_url}/states"
+            var states = await $"{_coutriesUrl}/states"
                 .GetJsonAsync<IEnumerable<StateDto>>();
 
             ViewBag.States = states;
