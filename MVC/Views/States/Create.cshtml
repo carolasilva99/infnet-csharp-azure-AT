@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -18,15 +18,11 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FlagBase64" class="control-label"></label>
-                <input asp-for="FlagBase64" class="form-control" />
-                <span asp-validation-for="FlagBase64" class="text-danger"></span>
+                <label asp-for="FormFile" class="control-label"></label>
+                <input asp-for="FormFile" class="form-control" type="file"/>
+                <span asp-validation-for="FormFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
-                <input asp-for="CountryId" class="form-control" />
-                <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
+            @Html.HiddenFor(m => m.CountryId)
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -34,9 +30,9 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<p>
+    @Html.ActionLink("Back To List", "Details", "Countries", new {id = Model.CountryId}, new { @class="btn btn-light"})
+</p>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

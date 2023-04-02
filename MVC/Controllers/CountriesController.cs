@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.Countries;
 using MVC.Models.States;
+using MVC.Utils;
 
 namespace MVC.Controllers
 {
@@ -33,6 +34,12 @@ namespace MVC.Controllers
             var country = await $"{_url}/countries/{id}"
                 .GetJsonAsync<CountryDto>();
 
+            var states = await $"{_url}/states/countries/{id}"
+                .GetJsonAsync<IEnumerable<StateDto>>();
+
+            ViewBag.States = states;
+            ViewBag.NumberOfStates = states.Count();
+
             return View(country);
         }
 
@@ -49,6 +56,11 @@ namespace MVC.Controllers
         {
             try
             {
+                var file = createCountryDto.FormFile;
+                var base64 = Base64Utils.Base64(file);
+
+                createCountryDto.FlagBase64 = base64;
+
                 var response = await $"{_url}/countries"
                     .PostJsonAsync(createCountryDto);
                 
@@ -66,6 +78,12 @@ namespace MVC.Controllers
             var country = await $"{_url}/countries/{id}"
                 .GetJsonAsync<CreateCountryDto>();
 
+            var states = await $"{_url}/states/countries/{id}"
+                .GetJsonAsync<IEnumerable<StateDto>>();
+
+            ViewBag.States = states;
+            ViewBag.NumberOfStates = states.Count();
+
             return View(country);
         }
 
@@ -76,14 +94,31 @@ namespace MVC.Controllers
         {
             try
             {
-                var response = await $"{_url}/countries"
-                    .PutJsonAsync(updateCountryDto);
+                if (updateCountryDto.FormFile != null)
+                {
+                    var file = updateCountryDto.FormFile;
+                    updateCountryDto.FlagBase64 = Base64Utils.Base64(file);
+                }
+
+                var response = await $"{_url}/countries/{id}"
+                    .PutJsonAsync(new
+                    {
+                        PhotoId = updateCountryDto.PhotoId ?? string.Empty,
+                        Name = updateCountryDto.Name,
+                        FlagBase64 = updateCountryDto.FlagBase64
+                    });
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (FlurlHttpException ex)
             {
-                return View();
+                ViewBag.ErrorMessage = ex.GetResponseStringAsync();
+                return View(updateCountryDto);
+            }
+            catch(Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return View(updateCountryDto);
             }
         }
 
@@ -103,7 +138,7 @@ namespace MVC.Controllers
         {
             try
             {
-                var country = await $"{_url}/countries/{id}"
+                var country = await $"{_url}/countries/{countryDto.Id}"
                     .DeleteAsync();
 
                 return RedirectToAction(nameof(Index));

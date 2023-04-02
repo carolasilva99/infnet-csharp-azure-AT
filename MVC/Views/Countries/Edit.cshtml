@@ -7,28 +7,78 @@
 
 <h1>Edit</h1>
 
-<h4>CreateCountryDto</h4>
+@{
+    if (ViewBag != null && ViewBag?.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+                    <p>@ViewBag.ErrorMessage</p>
+        </div>
+    }
+}
+
+<h4>Create Country</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <img class="card-img-top" max-length="100%" src="@Model.PhotoId" alt="@Model.Name">
             <div class="form-group">
-                <label asp-for="FlagBase64" class="control-label"></label>
-                <input asp-for="FlagBase64" class="form-control" />
-                <span asp-validation-for="FlagBase64" class="text-danger"></span>
+                <label asp-for="FormFile" class="control-label"></label>
+                <input asp-for="FormFile" class="form-control" type="file"/>
+                <span asp-validation-for="FormFile" class="text-danger"></span>
             </div>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.PhotoId)
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
+
+<h4>States</h4>
+<hr />
+
+<p>
+    @Html.ActionLink("Create New State", "Create", "States", new { id = Model.Id }, new { @class="btn btn-success"})
+</p>
+
+@{
+    var numberOfColsNeeded = 2;
+    var totalCounter = ViewBag.NumberOfStates;
+    var itemCounter = 1;
+}
+
+@foreach (var state in ViewBag.States)
+{
+    if (itemCounter % numberOfColsNeeded == 1)
+    {
+        @:<div class="row" >
+    }
+    
+    <div class="col-sm-6">
+        <div class="card">
+            <img class="card-img-top" src="@state.PhotoId" alt="@state.Name">
+            <div class="card-body">
+                <h5 class="card-title">@state.Name</h5>
+                @Html.ActionLink("Edit", "Edit","States",new { id=state.Id }, new { @class="btn btn-light"})
+                @Html.ActionLink("Details", "Details","States",new { id=state.Id }, new { @class="btn btn-light"})
+                @Html.ActionLink("Delete", "Delete","States",new { id=state.Id }, new { @class="btn btn-danger"})
+            </div>
+        </div>
+    </div>
+    if ((itemCounter % numberOfColsNeeded == 0) || ((itemCounter) == totalCounter))
+    {
+        @:</div>
+    }
+    itemCounter++;
+}
 
 <div>
     <a asp-action="Index">Back to List</a>

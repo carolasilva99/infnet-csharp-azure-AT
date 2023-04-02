@@ -52,7 +52,13 @@ namespace CountriesApi.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CountryDto>> Put(int id, [FromBody] CreateCountryDto country)
         {
-            var photoId = await BlobsService.Upload(country.FlagBase64, PhotoTypeEnum.COUNTRY_FLAG);
+            string photoId;
+
+            if (string.IsNullOrEmpty(country.PhotoId))
+                photoId = await BlobsService.Upload(country.FlagBase64, PhotoTypeEnum.COUNTRY_FLAG);
+            else
+                photoId = country.PhotoId;
+
             var mappedCountry = _mapper.Map<Country>(country);
             
             mappedCountry.Id = id;

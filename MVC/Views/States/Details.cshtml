@@ -9,34 +9,18 @@
 <div>
     <h4>StateDto</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhotoId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhotoId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CountryId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CountryId)
-        </dd>
-    </dl>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <img class="card-img-top" src="@Model.PhotoId" alt="@Model.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.Name</h5>
+                    <p><b>Country: </b> @ViewBag.Country.Name</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Back to list", "Details", "Countries", new { id=Model.Id }, new { @class="btn btn-info"})
 </div>
