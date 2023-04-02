@@ -37,9 +37,9 @@ builder.Services.AddCors(setupAction =>
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
-//Configure Swagger
-builder.Services.ConfigureSwaggerGen(c =>
+builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
@@ -47,7 +47,6 @@ builder.Services.ConfigureSwaggerGen(c =>
         Version = "v1"
     });
 });
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
