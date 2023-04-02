@@ -1,6 +1,7 @@
 ﻿using System.Net.Mime;
 using AT.Domain;
 using CountriesApi.Services;
+using FriendsAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -54,8 +55,7 @@ namespace CountriesApi
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddScoped<ICountriesService, CountriesService>();
-            services.AddScoped<IStatesService, StatesService>();
+            services.AddScoped<IFriendsService, FriendsService>();
 
             //AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
