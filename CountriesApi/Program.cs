@@ -11,24 +11,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add<HttpResponseExceptionFilter>();
-})
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-            new BadRequestObjectResult(context.ModelState)
-            {
-                ContentTypes =
-                {
-                    // using static System.Net.Mime.MediaTypeNames;
-                    MediaTypeNames.Application.Json,
-                    MediaTypeNames.Application.Xml
-                }
-            };
-    })
-    .AddXmlSerializerFormatters();
+//builder.Services.AddControllers(options =>
+//{
+//    options.Filters.Add<HttpResponseExceptionFilter>();
+//})
+//    .ConfigureApiBehaviorOptions(options =>
+//    {
+//        options.InvalidModelStateResponseFactory = context =>
+//            new BadRequestObjectResult(context.ModelState)
+//            {
+//                ContentTypes =
+//                {
+//                    // using static System.Net.Mime.MediaTypeNames;
+//                    MediaTypeNames.Application.Json,
+//                    MediaTypeNames.Application.Xml
+//                }
+//            };
+//    })
+//    .AddXmlSerializerFormatters();
+builder.Services.AddControllers();
 
 builder.Services.AddCors(setupAction =>
 {
