@@ -35,7 +35,7 @@ namespace FriendsAPI.Controllers
             return Ok(_mapper.Map<FriendDto>(_friendsService.GetById(id)));
         }
 
-        [HttpGet("/my-friends/{id}")]
+        [HttpGet("my-friends/{id}")]
         public ActionResult<IEnumerable<FriendDto>> List(int id)
         {
             return Ok(_mapper.Map<IEnumerable<FriendDto>>(_friendsService.GetMyFriends(id)));
@@ -65,14 +65,14 @@ namespace FriendsAPI.Controllers
             return Ok(_mapper.Map<FriendDto>(_friendsService.Update(mappedFriend)));
         }
 
-        [HttpPut("/my-friends/{id}/{newFriendId}")]
+        [HttpPut("my-friends/{id}/{newFriendId}")]
         public ActionResult AddFriendToFriendsList(int id, int newFriendId)
         {
             _friendsService.AddToMyFriendsList(id, newFriendId);
             return Ok();
         }
 
-        [HttpDelete("/my-friends/{id}/{oldFriendId}")]
+        [HttpDelete("my-friends/{id}/{oldFriendId}")]
         public ActionResult RemoveFromMyFriendsList(int id, int oldFriendId)
         {
             _friendsService.RemoveFromMyFriendsList(id, oldFriendId);

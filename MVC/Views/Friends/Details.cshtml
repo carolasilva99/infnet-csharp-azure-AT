@@ -7,60 +7,82 @@
 <h1>Details</h1>
 
 <div>
-    <h4>StateDto</h4>
+    <h4>Friend</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BirthDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BirthDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CellPhone)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CellPhone)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhotoId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhotoId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CountryId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CountryId)
-        </dd>
-    </dl>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <img class="card-img-top" src="@Model.PhotoId" alt="@Model.FirstName">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+                    <p><b>Birth Date</b>: @Model.BirthDate</p>
+                    <p><b>Cellphone</b>: @Model.CellPhone</p>
+                    <p><b>Email</b>: @Model.Email</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<h4>Country</h4>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <img class="card-img-top" src="@ViewBag?.Country?.PhotoId" alt="@ViewBag?.Country?.Name">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag?.Country?.Name</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>State</h4>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <img class="card-img-top" src="@ViewBag?.State?.PhotoId" alt="@ViewBag?.State?.Name">
+            <div class="card-body">
+                <h5 class="card-title">@ViewBag?.State?.Name</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Friends</h4>
+@Html.ActionLink("Add Friend", "AddToFriendsList", new { id=Model.Id }, new { @class="btn btn-success"})
+@{
+    var numberOfColsNeeded = 4;
+    var totalCounter = ViewBag?.MyFriends?.Count() ?? 0;
+    var itemCounter = 1;
+}
+
+@foreach (var friend in ViewBag?.MyFriends)
+{
+    if (itemCounter % numberOfColsNeeded == 1)
+    {
+        @:<div class="row" >
+    }
+
+    <div class="col-sm-3">
+        <div class="card">
+            <img class="card-img-top" src="@friend.PhotoId" alt="@friend.FirstName">
+            <div class="card-body">
+                <h5 class="card-title">@friend.FirstName @friend.LastName</h5>
+                <p>@friend.BirthDate</p>
+                <p>@friend.CellPhone</p>
+                <p>@friend.Email</p>
+                @Html.ActionLink("Remove", "RemoveFromFriendsList", new { id=friend.Id }, new { @class="btn btn-danger"})
+            </div>
+        </div>
+    </div>
+    if ((itemCounter % numberOfColsNeeded == 0) || ((itemCounter) == totalCounter))
+    {
+        @:</div>
+    }
+    itemCounter++;
+}
+
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }, new { @class="btn btn-light"})
+    @Html.ActionLink("Back to Friends", "Index", new { id = Model.Id  }, new { @class="btn btn-light"})
 </div>

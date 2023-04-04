@@ -18,6 +18,15 @@ namespace MVC.Controllers
             _configuration = configuration;
             _url = configuration.GetSection("CountriesApiUrl").Value;
         }
+
+        public async Task<ActionResult> Index()
+        {
+            var states = await $"{_url}/states"
+                .GetJsonAsync<IEnumerable<StateDto>>();
+
+            return View(states);
+        }
+
         // GET: StatesController/Details/5
         public async Task<ActionResult> Details(int id)
         {

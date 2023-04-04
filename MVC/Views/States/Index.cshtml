@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<MVC.Models.States.StateDto>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    @Html.ActionLink("Create New", "Create", "States", null, new { @class="btn btn-success"})
+</p>
+
+@{
+    var numberOfColsNeeded = 2;
+    var totalCounter = Model.Count();
+    var itemCounter = 1;
+}
+
+@foreach (var state in Model)
+{
+    if (itemCounter % numberOfColsNeeded == 1)
+    {
+        @:<div class="row" >
+    }
+    
+    <div class="col-sm-6">
+        <div class="card">
+            <img class="card-img-top" src="@state.PhotoId" alt="@state.Name">
+            <div class="card-body">
+                <h5 class="card-title">@state.Name</h5>
+                <p><b>Country: </b> @state.CountryName</p>
+                @Html.ActionLink("Edit", "Edit", new { id=state.Id }, new { @class="btn btn-light"})
+                @Html.ActionLink("Details", "Details", new { id=state.Id }, new { @class="btn btn-light"})
+                @Html.ActionLink("Delete", "Delete", new { id=state.Id }, new { @class="btn btn-danger"})
+            </div>
+        </div>
+    </div>
+    if ((itemCounter % numberOfColsNeeded == 0) || ((itemCounter) == totalCounter))
+    {
+        @:</div>
+    }
+    itemCounter++;
+}

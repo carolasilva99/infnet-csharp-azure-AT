@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>CreateFriendDto</h4>
+<h4>Friend</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -44,13 +44,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="StateId" class="control-label">Country & State</label>
-                <select id="StateId" name="StateId" class="form-select">
+                <select id="StateAndCountry" name="StateAndCountry" class="form-select">
                     @{
                         if (ViewBag?.States != null)
                         {
                             foreach (var state in ViewBag.States)
                             {
-                                <option value="@state.Id">@state.CountryName - @state.Name</option>
+                                <option value="@state.Id-@state.CountryId">@state.CountryName - @state.Name</option>
                             }
                         }
                     }

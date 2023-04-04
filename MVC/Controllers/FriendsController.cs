@@ -38,11 +38,18 @@ namespace MVC.Controllers
             var friend = await $"{_url}/friends/{id}"
                 .GetJsonAsync<FriendDto>();
 
-            var states = await $"{_url}/states/friends/{id}"
-                .GetJsonAsync<IEnumerable<StateDto>>();
+            var myFriends = await $"{_url}/friends/my-friends/{id}"
+                .GetJsonAsync<IEnumerable<FriendDto>>();
 
-            ViewBag.States = states;
-            ViewBag.NumberOfStates = states.Count();
+            var state = await $"{_coutriesUrl}/states/{friend.StateId}"
+                .GetJsonAsync<StateDto>();
+
+            var country = await $"{_coutriesUrl}/countries/{friend.CountryId}"
+                .GetJsonAsync<CountryDto>();
+
+            ViewBag.State = state;
+            ViewBag.Country = country;
+            ViewBag.MyFriends = myFriends;
 
             return View(friend);
         }
@@ -70,6 +77,11 @@ namespace MVC.Controllers
 
                 createFriendDto.PhotoBase64 = base64;
 
+                var stateAndCountry = createFriendDto.StateAndCountry.Split('-');
+
+                createFriendDto.StateId = Convert.ToInt32(stateAndCountry[0]);
+                createFriendDto.CountryId = Convert.ToInt32(stateAndCountry[1]);
+
                 var response = await $"{_url}/friends"
                     .PostJsonAsync(createFriendDto);
 
@@ -87,11 +99,10 @@ namespace MVC.Controllers
             var friend = await $"{_url}/friends/{id}"
                 .GetJsonAsync<CreateFriendDto>();
 
-            var states = await $"{_url}/states/friends/{id}"
+            var states = await $"{_coutriesUrl}/states"
                 .GetJsonAsync<IEnumerable<StateDto>>();
 
             ViewBag.States = states;
-            ViewBag.NumberOfStates = states.Count();
 
             return View(friend);
         }
@@ -138,7 +149,7 @@ namespace MVC.Controllers
         // POST: FriendsController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, FriendDto friendDto)
+        public async Task<ActionResult> Delete(FriendDto friendDto)
         {
             try
             {
