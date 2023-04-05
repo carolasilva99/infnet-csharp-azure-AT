@@ -49,10 +49,9 @@
 </div>
 
 <h4>Friends</h4>
-@Html.ActionLink("Add Friend", "AddToFriendsList", new { id=Model.Id }, new { @class="btn btn-success"})
 @{
     var numberOfColsNeeded = 4;
-    var totalCounter = ViewBag?.MyFriends?.Count() ?? 0;
+    var totalCounter = ViewBag?.NumberOfFriends;
     var itemCounter = 1;
 }
 
@@ -71,7 +70,6 @@
                 <p>@friend.BirthDate</p>
                 <p>@friend.CellPhone</p>
                 <p>@friend.Email</p>
-                @Html.ActionLink("Remove", "RemoveFromFriendsList", new { id=friend.Id }, new { @class="btn btn-danger"})
             </div>
         </div>
     </div>

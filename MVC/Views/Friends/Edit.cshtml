@@ -64,6 +64,73 @@
     </div>
 </div>
 
+<h4>Friends</h4>
+<hr />
+@{
+    var numberOfColsNeeded = 4;
+    var totalCounter = ViewBag?.NumberOfFriends;
+    var itemCounter = 1;
+}
+
+@foreach (var friend in ViewBag?.MyFriends)
+{
+    if (itemCounter % numberOfColsNeeded == 1)
+    {
+        @:<div class="row" >
+    }
+
+        <div class="col-sm-3">
+            <div class="card">
+                <img class="card-img-top" src="@friend.PhotoId" alt="@friend.FirstName">
+                <div class="card-body">
+                    <h5 class="card-title">@friend.FirstName @friend.LastName</h5>
+                    <p>@friend.BirthDate</p>
+                    <p>@friend.CellPhone</p>
+                    <p>@friend.Email</p>
+                @Html.ActionLink("Remove", "RemoveFromFriends", new { id=Model.Id, newFriendId = friend.Id }, new { @class="btn btn-danger"})
+                </div>
+            </div>
+        </div>
+    if ((itemCounter % numberOfColsNeeded == 0) || ((itemCounter) == totalCounter))
+    {
+        @:</div>
+    }
+    itemCounter++;
+}
+
+<hr />
+
+@{
+    var totalCounter2 = ViewBag?.TotalNumberOfFriends;
+    var itemCounter2 = 1;
+}
+
+@foreach (var friend in ViewBag?.Friends)
+{
+    if (itemCounter2 % numberOfColsNeeded == 1)
+    {
+        @:<div class="row" >
+    }
+
+    <div class="col-sm-3">
+        <div class="card">
+            <img class="card-img-top" src="@friend.PhotoId" alt="@friend.FirstName">
+            <div class="card-body">
+                <h5 class="card-title">@friend.FirstName @friend.LastName</h5>
+                <p>@friend.BirthDate</p>
+                <p>@friend.CellPhone</p>
+                <p>@friend.Email</p>
+                @Html.ActionLink("Add To Friends", "AddToFriends", new { friendId=Model.Id, newFriendId = friend.Id }, new { @class="btn btn-success"})
+            </div>
+        </div>
+    </div>
+    if ((itemCounter2 % numberOfColsNeeded == 0) || ((itemCounter2) == totalCounter2))
+    {
+        @:</div>
+    }
+    itemCounter2++;
+}
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>

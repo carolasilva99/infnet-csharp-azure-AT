@@ -1,0 +1,55 @@
+﻿@model MVC.Models.Friends.AddToMyFriendsDto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Add</h1>
+
+<h4>Friend</h4>
+<hr />
+<div class="col-sm-3">
+    <div class="card">
+        <img class="card-img-top" src="@Model.Friend?.PhotoId" alt="@Model.Friend?.FirstName">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Friend.FirstName @Model.Friend.LastName</h5>
+            <p>@Model.Friend.BirthDate</p>
+            <p>@Model.Friend.CellPhone</p>
+            <p>@Model.Friend.Email</p>
+        </div>
+    </div>
+</div>
+
+<h4>New Friend</h4>
+<hr />
+
+<div class="col-sm-3">
+    <div class="card">
+        <img class="card-img-top" src="@Model.NewFriend.PhotoId" alt="@Model.NewFriend.FirstName">
+        <div class="card-body">
+            <h5 class="card-title">@Model.NewFriend.FirstName @Model.NewFriend.LastName</h5>
+            <p>@Model.NewFriend.BirthDate</p>
+            <p>@Model.NewFriend.CellPhone</p>
+            <p>@Model.NewFriend.Email</p>
+        </div>
+    </div>
+</div>
+
+<form asp-action="AddToFriends" enctype="multipart/form-data">
+    <div>
+        <h5>Are you sure you want to add this relationship?</h5>
+    </div>
+    @Html.HiddenFor(m => m.FriendId)
+    @Html.HiddenFor(m => m.NewFriendId)
+    <div class="form-group">
+        <input type="submit" value="Add To Friends" class="btn btn-primary"/>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

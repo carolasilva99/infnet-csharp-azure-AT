@@ -41,6 +41,9 @@ namespace MVC.Controllers
             var myFriends = await $"{_url}/friends/my-friends/{id}"
                 .GetJsonAsync<IEnumerable<FriendDto>>();
 
+            var friends = await $"{_url}/friends"
+                .GetJsonAsync<IEnumerable<FriendDto>>();
+
             var state = await $"{_coutriesUrl}/states/{friend.StateId}"
                 .GetJsonAsync<StateDto>();
 
@@ -50,6 +53,9 @@ namespace MVC.Controllers
             ViewBag.State = state;
             ViewBag.Country = country;
             ViewBag.MyFriends = myFriends;
+            ViewBag.Friends = myFriends;
+            ViewBag.NumberOfFriends = myFriends.Count();
+            ViewBag.TotalNumberOfFriends = friends.Count();
 
             return View(friend);
         }
@@ -101,6 +107,27 @@ namespace MVC.Controllers
 
             var states = await $"{_coutriesUrl}/states"
                 .GetJsonAsync<IEnumerable<StateDto>>();
+
+            var myFriends = await $"{_url}/friends/my-friends/{id}"
+                .GetJsonAsync<IEnumerable<FriendDto>>();
+
+            var friends = await $"{_url}/friends"
+                .GetJsonAsync<IEnumerable<FriendDto>>();
+
+            var state = await $"{_coutriesUrl}/states/{friend.StateId}"
+                .GetJsonAsync<StateDto>();
+
+            var country = await $"{_coutriesUrl}/countries/{friend.CountryId}"
+                .GetJsonAsync<CountryDto>();
+
+            friend.StateAndCountry = $"{friend.StateId}-{friend.CountryId}";
+
+            ViewBag.State = state;
+            ViewBag.Country = country;
+            ViewBag.MyFriends = myFriends;
+            ViewBag.Friends = friends;
+            ViewBag.NumberOfFriends = myFriends.Count();
+            ViewBag.TotalNumberOfFriends = friends.Count();
 
             ViewBag.States = states;
 
@@ -161,6 +188,42 @@ namespace MVC.Controllers
             catch
             {
                 return View();
+            }
+        }
+
+        public async Task<ActionResult> AddToFriends(int friendId, int newFriendId)
+        {
+            var friend = await $"{_url}/friends/{friendId}"
+                .GetJsonAsync<FriendDto>();
+
+            var newFriend = await $"{_url}/friends/{newFriendId}"
+                .GetJsonAsync<FriendDto>();
+
+            return View(new AddToMyFriendsDto
+            {
+                Friend = friend,
+                NewFriend = newFriend
+            });
+        }
+
+        // POST: FriendsController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddToFriends(AddToMyFriendsDto addToMyFriends)
+        {
+            try
+            {
+                var friendId = addToMyFriends?.FriendId;
+                var newFriendId = addToMyFriends?.NewFriendId;
+
+                var response = await $"{_url}/friends/my-friends/{friendId}/{newFriendId}"
+                    .PutJsonAsync(null);
+
+                return RedirectToAction(nameof(Details), new { id = friendId });
+            }
+            catch
+            {
+                return View(addToMyFriends);
             }
         }
     }
