@@ -1,4 +1,5 @@
-﻿using Flurl.Http;
+﻿using AT.Domain;
+using Flurl.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.Countries;
@@ -42,8 +43,13 @@ namespace MVC.Controllers
         }
 
         // GET: StatesController/Create
-        public ActionResult Create(int id)
+        public async Task<ActionResult> Create(int id)
         {
+            var countries = await $"{_url}/countries"
+                .GetJsonAsync<IEnumerable<CountryDto>>();
+
+            ViewBag.Countries = countries;
+
             return View(new CreateStateDto
             {
                 CountryId = id

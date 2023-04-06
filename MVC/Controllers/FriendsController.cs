@@ -1,4 +1,5 @@
-﻿using Flurl;
+﻿using AT.Domain;
+using Flurl;
 using Flurl.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using MVC.Models.Countries;
 using MVC.Models.Friends;
 using MVC.Models.States;
 using MVC.Utils;
+using System.Linq;
 
 namespace MVC.Controllers
 {
@@ -36,7 +38,10 @@ namespace MVC.Controllers
         public async Task<ActionResult> Details(int id)
         {
             var friend = await $"{_url}/friends/{id}"
-                .GetJsonAsync<FriendDto>();
+                .GetJsonAsync<CreateFriendDto>();
+
+            var states = await $"{_coutriesUrl}/states"
+                .GetJsonAsync<IEnumerable<StateDto>>();
 
             var myFriends = await $"{_url}/friends/my-friends/{id}"
                 .GetJsonAsync<IEnumerable<FriendDto>>();
@@ -50,12 +55,18 @@ namespace MVC.Controllers
             var country = await $"{_coutriesUrl}/countries/{friend.CountryId}"
                 .GetJsonAsync<CountryDto>();
 
+            friend.StateAndCountry = $"{friend.StateId}-{friend.CountryId}";
+
+            friends = friends.Where(f => f.Id != id && !myFriends.Contains(f));
+
             ViewBag.State = state;
             ViewBag.Country = country;
             ViewBag.MyFriends = myFriends;
-            ViewBag.Friends = myFriends;
+            ViewBag.Friends = friends;
             ViewBag.NumberOfFriends = myFriends.Count();
             ViewBag.TotalNumberOfFriends = friends.Count();
+
+            ViewBag.States = states;
 
             return View(friend);
         }
@@ -83,7 +94,7 @@ namespace MVC.Controllers
 
                 createFriendDto.PhotoBase64 = base64;
 
-                var stateAndCountry = createFriendDto.StateAndCountry.Split('-');
+                var stateAndCountry = createFriendDto?.StateAndCountry?.Split('-');
 
                 createFriendDto.StateId = Convert.ToInt32(stateAndCountry[0]);
                 createFriendDto.CountryId = Convert.ToInt32(stateAndCountry[1]);
@@ -122,6 +133,8 @@ namespace MVC.Controllers
 
             friend.StateAndCountry = $"{friend.StateId}-{friend.CountryId}";
 
+            friends = friends.Where(f => f.Id != id && !myFriends.Contains(f));
+
             ViewBag.State = state;
             ViewBag.Country = country;
             ViewBag.MyFriends = myFriends;
@@ -146,6 +159,11 @@ namespace MVC.Controllers
                     var file = updateFriendDto.FormFile;
                     updateFriendDto.PhotoBase64 = Base64Utils.Base64(file);
                 }
+
+                var stateAndCountry = updateFriendDto?.StateAndCountry?.Split('-');
+
+                updateFriendDto.StateId = Convert.ToInt32(stateAndCountry[0]);
+                updateFriendDto.CountryId = Convert.ToInt32(stateAndCountry[1]);
 
                 var response = await $"{_url}/friends/{id}"
                     .PutJsonAsync(updateFriendDto);
@@ -224,6 +242,42 @@ namespace MVC.Controllers
             catch
             {
                 return View(addToMyFriends);
+            }
+        }
+
+        public async Task<ActionResult> RemoveFromFriends(int friendId, int oldFriendId)
+        {
+            var friend = await $"{_url}/friends/{friendId}"
+                .GetJsonAsync<FriendDto>();
+
+            var oldFriend = await $"{_url}/friends/{oldFriendId}"
+                .GetJsonAsync<FriendDto>();
+
+            return View(new RemoveFromFriendsDto
+            {
+                Friend = friend,
+                OldFriend = oldFriend
+            });
+        }
+
+        // POST: FriendsController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RemoveFromFriends(RemoveFromFriendsDto removeFromFriends)
+        {
+            try
+            {
+                var friendId = removeFromFriends?.FriendId;
+                var oldFriendId = removeFromFriends?.OldFriendId;
+
+                var response = await $"{_url}/friends/my-friends/{friendId}/{oldFriendId}"
+                    .DeleteAsync();
+
+                return RedirectToAction(nameof(Details), new { id = friendId });
+            }
+            catch
+            {
+                return View(removeFromFriends);
             }
         }
     }

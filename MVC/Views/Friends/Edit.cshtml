@@ -87,7 +87,7 @@
                     <p>@friend.BirthDate</p>
                     <p>@friend.CellPhone</p>
                     <p>@friend.Email</p>
-                @Html.ActionLink("Remove", "RemoveFromFriends", new { id=Model.Id, newFriendId = friend.Id }, new { @class="btn btn-danger"})
+                @Html.ActionLink("Remove", "RemoveFromFriends", new { friendId=Model.Id, oldFriendId = friend.Id }, new { @class="btn btn-danger"})
                 </div>
             </div>
         </div>
