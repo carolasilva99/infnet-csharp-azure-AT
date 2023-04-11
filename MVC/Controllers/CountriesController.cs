@@ -1,5 +1,7 @@
-﻿using Flurl;
+﻿using CountriesApi.DTOs;
+using Flurl;
 using Flurl.Http;
+using FriendsAPI.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.Countries;
@@ -13,17 +15,32 @@ namespace MVC.Controllers
         private readonly IConfiguration _configuration;
 
         private readonly string _url;
+        private readonly string _friendsUrl;
         // GET: CountriesController
         public CountriesController(IConfiguration configuration)
         {
             _configuration = configuration;
             _url = configuration.GetSection("CountriesApiUrl").Value;
+            _friendsUrl = configuration.GetSection("FriendsApiUrl").Value;
         }
 
         public async Task<ActionResult> Index()
         {
             var countries = await $"{_url}/countries"
                 .GetJsonAsync<IEnumerable<CountryDto>>();
+
+            var numberOfCountries = await $"{_url}/countries/count"
+                .GetJsonAsync<CountriesCountDto>();
+
+            var numberOfStates = await $"{_url}/states/count"
+                .GetJsonAsync<StatesCountDto>();
+
+            var numberOfFriends = await $"{_url}/friends/count"
+                .GetJsonAsync<FriendsCountDto>();
+
+            ViewBag.NumberOfCountries = numberOfCountries.NumberOfCountries;
+            ViewBag.NumberOfStates = numberOfStates.NumberOfStates;
+            ViewBag.NumberOfFriends = numberOfFriends.NumberOfFriends;
 
             return View(countries);
         }

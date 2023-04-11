@@ -9,5 +9,6 @@ namespace CountriesApi.Services
         Country GetById(int id);
         Country Update(Country country);
         void Delete(int id);
+        int Count();
     }
 }

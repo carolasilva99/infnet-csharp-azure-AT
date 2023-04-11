@@ -232,5 +232,32 @@ namespace CountriesApi.Services
                 connection.Close();
             }
         }
+
+        public int Count()
+        {
+            using var connection = new SqlConnection(_connectionStrings.Database);
+            var procedureName = "StatesCount";
+            var sqlCommand = new SqlCommand(procedureName, connection);
+
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+
+            var numberOfStates = 0;
+            try
+            {
+                connection.Open();
+
+                using var reader = sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+                    numberOfStates = Convert.ToInt32(reader["NumberOfStates"]);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return numberOfStates;
+        }
     }
 }

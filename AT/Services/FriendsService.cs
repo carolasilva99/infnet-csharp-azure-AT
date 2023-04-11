@@ -312,5 +312,32 @@ namespace FriendsAPI.Services
                 connection.Close();
             }
         }
+
+        public int Count()
+        {
+            using var connection = new SqlConnection(_connectionStrings.Database);
+            var procedureName = "FriendsCount";
+            var sqlCommand = new SqlCommand(procedureName, connection);
+
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+
+            var numberOfFriends = 0;
+            try
+            {
+                connection.Open();
+
+                using var reader = sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+                    numberOfFriends = Convert.ToInt32(reader["NumberOfFriends"]);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return numberOfFriends;
+        }
     }
 }

@@ -187,5 +187,32 @@ namespace CountriesApi.Services
                 connection.Close();
             }
         }
+
+        public int Count()
+        {
+            using var connection = new SqlConnection(_connectionStrings.Database);
+            var procedureName = "CountriesCount";
+            var sqlCommand = new SqlCommand(procedureName, connection);
+
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+
+            var numberOfCountries = 0;
+            try
+            {
+                connection.Open();
+
+                using var reader = sqlCommand.ExecuteReader(CommandBehavior.CloseConnection);
+                while (reader.Read())
+                {
+                    numberOfCountries = Convert.ToInt32(reader["NumberOfCountries"]);
+                }
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            return numberOfCountries;
+        }
     }
 }

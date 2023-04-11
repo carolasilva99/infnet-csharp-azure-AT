@@ -2,10 +2,37 @@
 @model IEnumerable<MVC.Models.Countries.CountryDto>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Countries";
 }
 
-<h1>Index</h1>
+<h1>Countries</h1>
+
+<div class="row">
+    <div class="col-4  d-flex">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Countries Count</h5>
+                <h4>@ViewBag.NumberOfCountries</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-4  d-flex">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">States Count</h5>
+                <h4>@ViewBag.NumberOfStates</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-4  d-flex">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Friends Count</h5>
+                <h4>@ViewBag.NumberOfFriends</h4>
+            </div>
+        </div>
+    </div>
+</div>
 
 <p>
     @Html.ActionLink("Create New", "Create", "Countries", null, new { @class="btn btn-success"})

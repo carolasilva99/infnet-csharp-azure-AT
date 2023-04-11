@@ -74,5 +74,12 @@ namespace CountriesApi.Controllers
             _countriesService.Delete(id);
             return Ok();
         }
+
+        [HttpGet("count")]
+        public ActionResult<CountriesCountDto> Count()
+        {
+            var numberOfCountries = _countriesService.Count();
+            return Ok(new CountriesCountDto { NumberOfCountries = numberOfCountries });
+        }
     }
 }

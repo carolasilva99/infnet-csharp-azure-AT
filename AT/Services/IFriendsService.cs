@@ -13,5 +13,6 @@ namespace FriendsAPI.Services
         void AddToMyFriendsList(int id, int newFriendId);
         IEnumerable<Friend> GetMyFriends(int id);
         void RemoveFromMyFriendsList(int id, int oldFriendId);
+        int Count();
     }
 }

@@ -2,6 +2,7 @@
 using AutoMapper;
 using CountriesApi.Services;
 using FriendsApi.DTOs;
+using FriendsAPI.DTOs;
 using FriendsAPI.Models;
 using FriendsAPI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,13 @@ namespace FriendsAPI.Controllers
         public ActionResult<IEnumerable<FriendDto>> List()
         {
             return Ok(_mapper.Map<IEnumerable<FriendDto>>(_friendsService.List()));
+        }
+
+        [HttpGet("count")]
+        public ActionResult<FriendsCountDto> Count()
+        {
+            var numberOfFriends = _friendsService.Count();
+            return Ok(new FriendsCountDto{ NumberOfFriends = numberOfFriends });
         }
 
         [HttpGet("{id}")]

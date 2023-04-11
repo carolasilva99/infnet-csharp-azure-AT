@@ -10,5 +10,6 @@ namespace CountriesApi.Services
         State Update(State state);
         void Delete(int id);
         IEnumerable<State> List();
+        int Count();
     }
 }

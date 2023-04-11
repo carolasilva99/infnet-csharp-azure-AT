@@ -69,5 +69,12 @@ namespace CountriesApi.Controllers
             _statesService.Delete(id);
             return Ok();
         }
+
+        [HttpGet("count")]
+        public ActionResult<StatesCountDto> Count()
+        {
+            var numberOfStates = _statesService.Count();
+            return Ok(new StatesCountDto { NumberOfStates = numberOfStates });
+        }
     }
 }
