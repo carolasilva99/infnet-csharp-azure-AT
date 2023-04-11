@@ -35,7 +35,7 @@ namespace MVC.Controllers
             var numberOfStates = await $"{_url}/states/count"
                 .GetJsonAsync<StatesCountDto>();
 
-            var numberOfFriends = await $"{_url}/friends/count"
+            var numberOfFriends = await $"{_friendsUrl}/friends/count"
                 .GetJsonAsync<FriendsCountDto>();
 
             ViewBag.NumberOfCountries = numberOfCountries.NumberOfCountries;
