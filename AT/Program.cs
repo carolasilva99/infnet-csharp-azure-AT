@@ -88,7 +88,7 @@ app.UseSwagger();
 
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CountriesAPI");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "FriendsAPI");
     c.RoutePrefix = string.Empty;
 });
 
